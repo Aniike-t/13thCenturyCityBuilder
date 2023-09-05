@@ -4,8 +4,8 @@ const ctx = canvas.getContext('2d');
 
 const numRows = 16;
 const numCols = 32;
-const tileWidth = 512 / numCols;
-const tileHeight = 256 / numRows;
+const tileWidth = 1024 / numCols;
+const tileHeight = 512 / numRows;
 let loadone = false;
 let selectedBuildingIndex = -1;
 const alerts= document.getElementById('altmsg')
@@ -41,46 +41,34 @@ const cityData = Array.from({ length: numRows }, () =>
 );
 
 
-const water = new Image();
-water.src = 'assets/water.jpg';//1 for water
-const grass = new Image();
-grass.src = 'assets/grass.jpg';//0 for grass
-const grass2 = new Image();
-grass2.src = 'assets/grass2.png';//0.5 for grass
-const house = new Image();
-house.src = 'assets/house.png';//-1 for house
-const road = new Image();
-road.src = 'assets/road.png';//-2 for road
-const factory = new Image();
-factory.src = 'assets/factory.png';//2 for factory
-const farm = new Image();
-farm.src = 'assets/farm.jpg';//3 for farm
-const wind1 = new Image();
-wind1.src = 'assets/wind1.png';// 5.0 set of lower windmill
-const wind2 = new Image();
-wind2.src = 'assets/wind2.png';// 5.1 set of upper windmill
-const TownHall = new Image();
-TownHall.src = 'assets/TownHall.png';// 6 is townhall
-const Mine = new Image();
-Mine.src = 'assets/mine.png';// 7 is Mine
-const ware = new Image();
-ware.src = 'assets/warehouse.png';// 4 is warehouse
-const Fisry = new Image();
-Fisry.src = 'assets/fishery.png';// 8 is Fisry
-const park = new Image();
-park.src = 'assets/park.png';// 9 is Park
-const baseT = new Image();
-baseT.src = 'assets/wdc1.png';// 10.0 is baseT
-const UpperT = new Image();
-UpperT.src = 'assets/wdc2.png';// 10.1 is UpperT
-const swrdd= new Image();
-swrdd.src = 'assets/swrdd.png';// 11.0 is swrd
-const swrdu = new Image();
-swrdu.src = 'assets/swrdu.png';// 11.1 is swrd
-const left = new Image();
-left.src = 'assets/left.png';// 12.0 is left
-const right = new Image();
-right.src = 'assets/right.png';// 12.1 is right
+
+function createImage(src) {
+  const image = new Image();
+  image.src = src;// You can assign an identifier to the image for reference
+  return image;
+}
+
+// Usage:
+const water = createImage('assets/water.jpg');      //1
+const grass = createImage('assets/grass.jpg');      //0
+const grass2 = createImage('assets/grass2.png');    //0.5
+const house = createImage('assets/house.png');      //-1
+const road = createImage('assets/road.png');        //-2
+const factory = createImage('assets/factory.png');  //2
+const farm = createImage('assets/farm.jpg');        //3
+const wind1 = createImage('assets/wind1.png');      //5.0
+const wind2 = createImage('assets/wind2.png');      //5.1
+const TownHall = createImage('assets/TownHall.png');//6
+const Mine = createImage('assets/mine.png');        //7
+const ware = createImage('assets/warehouse.png');   //4
+const Fisry = createImage('assets/fishery.png');    //8
+const park = createImage('assets/park.png');        //9
+const baseT = createImage('assets/wdc1.png');       //10.0
+const UpperT = createImage('assets/wdc2.png');      //10.1
+const swrdd = createImage('assets/swrdd.png');      //11.0
+const swrdu = createImage('assets/swrdu.png');      //11.1
+const left = createImage('assets/left.png');        //12.0
+const right = createImage('assets/right.png');      //12.1
 
 //Assign buildings to index
 const buildingImages = {
@@ -104,7 +92,6 @@ const buildingImages = {
   11.1: swrdu,
   12.0: left,
   12.1: right
-
 };
 
 function drawGrid() {
@@ -125,7 +112,7 @@ function drawGrid() {
 
 function gameLoop() {
   drawGrid();
-  setTimeout(requestAnimationFrame(gameLoop),30000);
+  requestAnimationFrame(gameLoop);
 }
 
 // Start the game loop
@@ -217,26 +204,36 @@ canvas.addEventListener('click', (event) => {
       coincount.innerHTML = CoinsCurrency; 
     }
   }
-  CheckTiles();
 });
 
+
+NoOfPeopleHTML.innerHTML = No_of[0]*2;
+
+const coincount = document.getElementById("coins");
+const NoOfPeopleHTML = document.getElementById("people");
 
 let msgs = ['Requires road nearby or farm and place on grass',
             'Requires road nearby and place on grass',
             'Can be placed only over grass',
             'Can build only one townhall',
             'Can only destroy roads',
-            'OR Not enough Coins ']            
+            'OR Not enough Coins ']  
+
 //0grass 1house 2road 3fram 4warehouse 5factory 6townhall 7windmill 8mine 9fishery 10park 11WDC 12Sword
 const Bcost = [ 1, 2, 0, 1, 5, 2, 10, 25, 50, 75 ,100, 150, 200]
 //All Functions for building
+
+
+// 0-NoOfHouses 1-NoOfFactory 2-NoOfFarmlands 3-NoOfWindmill 4-NoOfMines 5-Wares 6-Fishery 7-WoodCutter 8-parks
+let No_of = [ 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
 function BuildFarm(row,col){
   if(((cityData[row][col+1] ===-2 || cityData[row][col-1]===-2 || cityData[row+1][col]===-2 || cityData[row-1][col]===-2)
       ||(cityData[row][col+1] ===3 || cityData[row][col-1]===3 || cityData[row+1][col]===3 || cityData[row-1][col]===3))
       && (cityData[row][col] === 0.5 || cityData[row][col]=== 0) && (CoinsCurrency>(Bcost[3]-1))){
     cityData[row][col] = 3;
     CoinsCurrency=CoinsCurrency-Bcost[3];
-
+        No_of[2]++;
   }
   else{
     alerts.innerText = msgs[0] + " " + msgs[5];
@@ -246,13 +243,16 @@ function BuildHouse(row,col){
   if(ISconnected(row,col) && CoinsCurrency>=Bcost[1]){
     cityData[row][col] = -1;
     CoinsCurrency-=Bcost[1];
+    No_of[0]++;
     if(cityData[row][col+1]===-1){
       cityData[row][col]=12.0
       cityData[row][col+1]=12.1
+      No_of[0]+=2;
     }
     else if (cityData[row][col-1]===-1){
       cityData[row][col-1]=12.0
       cityData[row][col]=12.1
+      No_of[0]+=2;
     }
   }
   else{
@@ -263,7 +263,7 @@ function BuildFactory(row,col){
   if(ISconnected(row,col)&& CoinsCurrency>=Bcost[5]){
     cityData[row][col] = 2;
     CoinsCurrency-=Bcost[5];
-
+    No_of[1]++;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -283,6 +283,7 @@ function BuildWindmill(row,col){
     cityData[row-1][col] = 5.1;
     cityData[row][col] = 5.0;
     CoinsCurrency-=Bcost[7];
+    No_of[3]++;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -299,6 +300,7 @@ function BSword(row,col){
     alerts.innerText = msgs[1]+ " " + msgs[5];
   }
 }
+let ISTownhall = false; //To maintain one townhall only
 function BuildTownHall(row,col){
   if(ISconnected(row,col) && ISTownhall === false && CoinsCurrency>=Bcost[6]){
     ISTownhall = true;
@@ -313,6 +315,7 @@ function BuildMine(row,col){
   if(ISconnected(row,col) && CoinsCurrency>=Bcost[8]){
     cityData[row][col] = 7;
     CoinsCurrency-=Bcost[8];
+    No_of[4]++;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -322,6 +325,7 @@ function BuildWare(row,col){
   if(ISconnected(row,col)&& CoinsCurrency>=Bcost[4]){
     cityData[row][col] = 4;
     CoinsCurrency-=Bcost[4];
+    No_of[5]++;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];  
@@ -332,6 +336,7 @@ function BuildFishery(row,col){
       && (cityData[row+1][col]===1 || cityData[row-1][col]===1 || cityData[row][col+1]===1 || cityData[row][col-1]===1)){
     cityData[row][col] = 8;
     CoinsCurrency-=Bcost[9];
+    No_of[6]++;
   }
   else{
     alerts.innerText = msgs[1]+" Around water. "+ " " + msgs[5];  
@@ -341,6 +346,7 @@ function BuildPark(row,col){
   if(Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[10]){
     cityData[row][col] = 9;
     CoinsCurrency-=Bcost[10];
+    No_of[8]++;
   }else{
     alerts.innerText = "Only can be placed over grass"+ " " + msgs[5];
   }
@@ -351,6 +357,7 @@ function BuildWDC(row,col){
     cityData[row-1][col] = 10.1;
     cityData[row][col] = 10.0;
     CoinsCurrency-=Bcost[11];
+    No_of[7]++;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -371,59 +378,6 @@ function ISconnected(row,col){
 }
 
 
-
-// NoOfHouses NoOfFactory NoOfFarmlands NoOfWindmill NoOfMines Wares Fishery WoodCutter
-let No_of = [ 0, 0, 0, 0, 0, 0, 0, 0]
-
-const coincount = document.getElementById("coins");
-const NoOfPeopleHTML = document.getElementById("people");
-let parks =0
-
-function CheckTiles(){
-  No_of = [ 0, 0, 0, 0, 0, 0, 0, 0]  
-  // NoOfHouses NoOfFactory NoOfFarmlands NoOfWindmill NoOfMines Wares Fishery WDC
-  parks=0
-
-  for (let row = 0; row < numRows; row++) {
-    for (let col = 0; col < numCols; col++) {
-      if(cityData[row][col]===12.1){
-        No_of[0]+=3;
-      }
-      else if(cityData[row][col] === -1){
-        No_of[0]++;
-      }
-      else if(cityData[row][col] === 2){
-        No_of[1]++;
-      }
-      else if(cityData[row][col] === 3){
-        No_of[2]++;
-      }
-      else if(cityData[row][col] === 5){
-        No_of[3]++;
-      }
-      else if(cityData[row][col] === 7){
-        No_of[4]++;
-      }
-      else if(cityData[row][col] === 4){
-        No_of[5]++;
-        console.log(No_of[5])
-      }
-      else if(cityData[row][col] === 8){
-        No_of[6]++;
-      }
-      else if(cityData[row][col] === 9){
-        parks++;
-      }
-      else if(cityData[row][col] === 10){
-        No_of[7]++;
-      }
-    }
-  }
-  NoOfPeopleHTML.innerHTML = No_of[0]*2;
-
-}
-
-
 let yrmnth = [1200, 0]
 
 function yearupdate(){
@@ -438,15 +392,12 @@ function yearupdate(){
   mnth.innerText = yrmnth[1];
 }
 
-
-
 //-------------Production algos ----------------
 function giveCoinsPeriodically() {
   CalPRO();                                   //Update production
   UpdateTotal();                              //Update total cost of goods vailable  
   yearupdate();                               //Update year
   coincount.innerHTML = CoinsCurrency;        //Display Total Coins Available
-
   setTimeout(giveCoinsPeriodically, 10000);   // 10000 milliseconds = 10 seconds
 }
 
@@ -660,4 +611,3 @@ function UpdateTotal(){
   }
   tsellbtn.innerText=tsell;
 }
-
