@@ -1,9 +1,11 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+const coincount = document.getElementById("coins");
+const NoOfPeopleHTML = document.getElementById("people");
 
-const numRows = 16;
-const numCols = 32;
+const numRows = 20;
+const numCols = 40;
 const tileWidth = 1024 / numCols;
 const tileHeight = 512 / numRows;
 let loadone = false;
@@ -171,8 +173,6 @@ sidebarButtons.forEach(button => {
   });
 });
 
-
-
 canvas.addEventListener('click', (event) => {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left - tileWidth ;
@@ -207,11 +207,6 @@ canvas.addEventListener('click', (event) => {
 });
 
 
-NoOfPeopleHTML.innerHTML = No_of[0]*2;
-
-const coincount = document.getElementById("coins");
-const NoOfPeopleHTML = document.getElementById("people");
-
 let msgs = ['Requires road nearby or farm and place on grass',
             'Requires road nearby and place on grass',
             'Can be placed only over grass',
@@ -245,15 +240,16 @@ function BuildHouse(row,col){
     CoinsCurrency-=Bcost[1];
     No_of[0]++;
     if(cityData[row][col+1]===-1){
-      cityData[row][col]=12.0
-      cityData[row][col+1]=12.1
+      cityData[row][col]=12.0;
+      cityData[row][col+1]=12.1;
       No_of[0]+=2;
     }
     else if (cityData[row][col-1]===-1){
-      cityData[row][col-1]=12.0
-      cityData[row][col]=12.1
+      cityData[row][col-1]=12.0;
+      cityData[row][col]=12.1;
       No_of[0]+=2;
     }
+    NoOfPeopleHTML.innerHTML = No_of[0]*2;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
