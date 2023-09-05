@@ -10,15 +10,15 @@ body {
   
 }
 canvas {
-  margin-top:13%;
-  margin-left:25%;
+  margin-top:12%;
+  margin-left:22%;
   position: absolute;
   padding: 20px; 
 }
 #sidebar{
   position: absolute;
-  min-width: 20%;
-  max-width:20%;
+  min-width: 14%;
+  max-width:14%;
   margin-left: 1%;
   padding: 20px;
   border-radius: 20px;
@@ -43,7 +43,7 @@ canvas {
   transition: ease-in 0.2s;
   margin-top: 5px;
   text-align: left;
-  width: 70%;
+  width: 100%;
   font-size: 20px;
   height: 33px;
   padding: 2px;
@@ -63,13 +63,13 @@ canvas {
   background-color: rgba(228, 228, 228, 0.664);
   border-radius: 20px;
   position: absolute;
-  margin-left: 65%;
-  margin-top: 25%;
+  margin-left: 41%;
+  margin-top: 0%;
   width: 300px; /* Adjust the width as needed */
   white-space: nowrap;
   overflow-x: auto;
   padding: 10px;
-  border: 10px solid #5a2020;
+  border: 5px solid #5a2020;
 }
 
 .scrbtn{
@@ -105,11 +105,11 @@ canvas {
 }
 .scrolling-container::-webkit-scrollbar {
   width: 10px;
-  background-color: aliceblue;
+  background-color: #792c2c;
   border-radius: 10px;
 }
 .scrolling-container::-webkit-scrollbar-thumb {
-  background-color: #565656;
+  background-color:  #8b5252;
   border-radius: 10px;
 }
 .alertscon{
