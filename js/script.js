@@ -27,7 +27,7 @@ let Op = [0,0]
 
 //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
 let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];       //Output of secondary buildings
-let CoinsCurrency = 10;                           //Starting currency
+let CoinsCurrency = 10000;                           //Starting currency
 const yr = document.getElementById('yr');
 const mnth = document.getElementById('mnth');
 
