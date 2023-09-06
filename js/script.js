@@ -36,7 +36,8 @@ let tsell=0;
 const sellAllButton = document.getElementById("sellall");
 const tsellbtn= document.getElementById('tsell');
 
-
+//Happiness index
+let h=0;
 
 const cityData = Array.from({ length: numRows }, () =>
   Array.from({ length: numCols }, () => 0)
@@ -71,6 +72,8 @@ const swrdd = createImage('assets/swrdd.png');      //11.0
 const swrdu = createImage('assets/swrdu.png');      //11.1
 const left = createImage('assets/left.png');        //12.0
 const right = createImage('assets/right.png');      //12.1
+const tank = createImage('assets/tank.png');        //13
+
 
 //Assign buildings to index
 const buildingImages = {
@@ -104,11 +107,13 @@ function drawGrid() {
       const buildingIndex = cityData[row][col];
 
       if (buildingImages.hasOwnProperty(buildingIndex)) {
-// Enable image smoothing
+        //for keeping the image quality as original as possible
         ctx.mozImageSmoothingEnabled = false;
         ctx.webkitImageSmoothingEnabled = false;
         ctx.msImageSmoothingEnabled = false;
         ctx.imageSmoothingEnabled = false;
+        
+        //Get building index and build
         const image = buildingImages[buildingIndex];
         ctx.drawImage(image, x, y, tileWidth, tileHeight);
       }
