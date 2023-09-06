@@ -96,7 +96,8 @@ const buildingImages = {
   11.0: swrdd,
   11.1: swrdu,
   12.0: left,
-  12.1: right
+  12.1: right,
+  13: tank
 };
 
 function drawGrid() {
@@ -163,7 +164,7 @@ function loadOnce() {
   loadone = true;
 }
 
-let list = ["Destroy"," ","Factory","Farm","Warehouse","Windmill","Townhall","Mine","Fishery","Park","Wood Cutter"];
+let list = ["Destroy"," ","Factory","Farm","Warehouse","Windmill","Townhall","Mine","Fishery","Park","Wood Cutter","Sword Artifact","","Water Tank"];
 const selectedbuid = document.getElementById('selectedbuild');
 const sidebarButtons = document.querySelectorAll('.sidebar-button');
 sidebarButtons.forEach(button => {
@@ -200,7 +201,8 @@ canvas.addEventListener('click', (event) => {
     '8': BuildFishery,
     '9': BuildPark,
     '10': BuildWDC,
-    '11': BSword
+    '11': BSword,
+    '13': Btank
   };
 
   const col = Math.floor(x / tileWidth);
@@ -224,8 +226,8 @@ let msgs = ['Requires road nearby or farm and place on grass',
             'Can only destroy roads',
             'OR Not enough Coins ']  
 
-//0grass 1house 2road 3fram 4warehouse 5factory 6townhall 7windmill 8mine 9fishery 10park 11WDC 12Sword
-const Bcost = [ 1, 2, 0, 1, 5, 2, 10, 25, 50, 75 ,100, 150, 200]
+//0grass 1house 2road 3fram 4warehouse 5factory 6townhall 7windmill 8mine 9fishery 10park 11WDC 12Sword 13tank
+const Bcost = [ 1, 2, 0, 1, 5, 2, 10, 25, 50, 75 ,100, 150, 200, 5]
 //All Functions for building
 
 
@@ -259,13 +261,14 @@ function BuildHouse(row,col){
       cityData[row][col]=12.1;
       No_of[0]+=2;
     }
-    NoOfPeopleHTML.innerHTML = No_of[0]*2;
+    NoOfPeopleHTML.innerHTML = No_of[0];
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
   }
 }
 function BuildFactory(row,col){
+  h-=2
   if(ISconnected(row,col)&& CoinsCurrency>=Bcost[5]){
     cityData[row][col] = 2;
     CoinsCurrency-=Bcost[5];
@@ -296,6 +299,7 @@ function BuildWindmill(row,col){
   }
 }
 function BSword(row,col){
+  h+=10
   if((ISconnected(row,col) || ISconnected(row-1,col) ) && CoinsCurrency>=Bcost[12]
       && Math.floor(cityData[row-1][col])===0 && Math.floor(cityData[row][col])===0){
     cityData[row-1][col] = 11.1;
@@ -308,6 +312,7 @@ function BSword(row,col){
 }
 let ISTownhall = false; //To maintain one townhall only
 function BuildTownHall(row,col){
+  h+=3
   if(ISconnected(row,col) && ISTownhall === false && CoinsCurrency>=Bcost[6]){
     ISTownhall = true;
     CoinsCurrency-=Bcost[6];
@@ -349,6 +354,7 @@ function BuildFishery(row,col){
   }
 }
 function BuildPark(row,col){
+  h+=5
   if(Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[10]){
     cityData[row][col] = 9;
     CoinsCurrency-=Bcost[10];
@@ -368,6 +374,33 @@ function BuildWDC(row,col){
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
   }
+}
+function Btank(row,col){
+    if(CoinsCurrency>Bcost[13] && Math.floor(cityData[row][col])===0){  
+    h+=2;
+    cityData[row][col]=13;
+    console.log(cityData);
+    const radius = 2; 
+    // Loop through the tiles in the radius
+    for (let r = row - radius; r <= row + radius; r++) {
+      for (let c = col - radius; c <= col + radius; c++) {
+        // Check if the tile is within bounds
+        if (r >= 0 && r < numRows && c >= 0 && c < numCols) {
+          // Manipulate based on the building type
+          console.log(r+" "+c);
+          if (cityData[r][c] === -1 || cityData[row][col]===12.0){
+            console.log("here");
+            No_of[0]++;
+          } else if (cityData[r][c] === 3) {
+            No_of[2]++;
+            console.log("here2")
+          }
+        }
+      }
+    }
+    CoinsCurrency-=Bcost[13];
+    NoOfPeopleHTML.innerHTML = No_of[0];
+  }else{alerts.innerText="Place on grass or Not Enough Coins ( Place water tank after buildings to get benefit on farms and houses )";}
 }
 
 
@@ -494,7 +527,7 @@ buttons.forEach(button => {
 function CalPRO(){
   let eff = 0;
   try{
-    eff = Math.floor((No_of[0]*2)/(No_of[1]+No_of[2]+No_of[3]+No_of[4]+No_of[5]+No_of[6]+No_of[7]))
+    eff = Math.floor((No_of[0])/(No_of[1]+No_of[2]+No_of[3]+No_of[4]+No_of[5]+No_of[6]+No_of[7]))
     //efficiency refers to how many people can be there in per building, manpower in a building
   }
   catch(error){
