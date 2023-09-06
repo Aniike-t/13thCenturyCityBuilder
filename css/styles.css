@@ -105,14 +105,15 @@ canvas {
 .scr:hover{
   color:#000000
 }
-.scrolling-container::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 10px;
   background-color: #792c2c;
   border-radius: 10px;
 }
-.scrolling-container::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color:  #8b5252;
   border-radius: 10px;
+  width: 50px;
 }
 .alertscon{
   position: absolute;

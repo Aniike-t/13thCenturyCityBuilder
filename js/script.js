@@ -105,8 +105,10 @@ function drawGrid() {
 
       if (buildingImages.hasOwnProperty(buildingIndex)) {
 // Enable image smoothing
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
+        ctx.mozImageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.msImageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
         const image = buildingImages[buildingIndex];
         ctx.drawImage(image, x, y, tileWidth, tileHeight);
       }
