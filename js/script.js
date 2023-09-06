@@ -104,6 +104,9 @@ function drawGrid() {
       const buildingIndex = cityData[row][col];
 
       if (buildingImages.hasOwnProperty(buildingIndex)) {
+// Enable image smoothing
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         const image = buildingImages[buildingIndex];
         ctx.drawImage(image, x, y, tileWidth, tileHeight);
       }
