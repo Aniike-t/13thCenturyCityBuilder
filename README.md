@@ -3,9 +3,9 @@
 Welcome to the 13th Century City Builder Game, a 2D medieval city-building game developed with JavaScript, HTML, and CSS. In this game, you'll step back in time to the 13th century and take on the role of a city planner and builder. Your objective is to create a thriving medieval city by strategically placing various buildings and managing your resources.<br><br>
 - This game is made for game jam hosted on : https://js13kgames.com
 - Game is made under 13Kilobytes ( 13,312bytes ) as per the rules.
-- based on the theme of 13th Century.
+- Based on the theme : 13th Century.
 <br><br>
-We've stayed true to the 13th-century theme in the game by including research elements that were actually invented during that time. This means that when you explore and unlock new technologies in the game, you're experiencing the real innovations and progress made in the 13th century. It's a way to bring history to life as you build your city!
+I had stayed true to the 13th-century theme in the game by including research elements that were actually invented during that time.
 
 ## Gameplay
 
@@ -22,6 +22,7 @@ We've stayed true to the 13th-century theme in the game by including research el
 - **Year (Y)** and **Month (M)**: Keep track of the current year and month as your city progresses.
 - **People**: The number of inhabitants in your city.
 - **Coins**: Your city's currency for purchasing buildings and resources.
+- **Happiness**: Your city's happiness is major factor on the city's income boost.
 
 ### Buildings
 Buildings are the heart of your city. Click on the buttons in the sidebar to select a building, and then click on the grid to place it. Each building serves a specific purpose and contributes to the growth of your city.
