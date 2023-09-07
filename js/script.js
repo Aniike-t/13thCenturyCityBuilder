@@ -27,7 +27,7 @@ let Op = [0,0]
 
 //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
 let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];       //Output of secondary buildings
-let CoinsCurrency = 10000;                           //Starting currency
+let CoinsCurrency = 10;                           //Starting currency
 const yr = document.getElementById('yr');
 const mnth = document.getElementById('mnth');
 
@@ -38,6 +38,11 @@ const tsellbtn= document.getElementById('tsell');
 
 //Happiness index
 let h=0;
+const hi = document.getElementById('hi');
+hi.innerText=h;
+
+//year and month
+let yrmnth = [1200, 0]
 
 const cityData = Array.from({ length: numRows }, () =>
   Array.from({ length: numCols }, () => 0)
@@ -73,7 +78,8 @@ const swrdu = createImage('assets/swrdu.png');      //11.1
 const left = createImage('assets/left.png');        //12.0
 const right = createImage('assets/right.png');      //12.1
 const tank = createImage('assets/tank.png');        //13
-
+const m1 = createImage('assets/m1.png');            //14.0
+const m2 = createImage('assets/m2.png');            //14.1
 
 //Assign buildings to index
 const buildingImages = {
@@ -97,7 +103,9 @@ const buildingImages = {
   11.1: swrdu,
   12.0: left,
   12.1: right,
-  13: tank
+  13: tank,
+  14.0: m1,
+  14.1: m2
 };
 
 function drawGrid() {
@@ -164,7 +172,7 @@ function loadOnce() {
   loadone = true;
 }
 
-let list = ["Destroy"," ","Factory","Farm","Warehouse","Windmill","Townhall","Mine","Fishery","Park","Wood Cutter","Sword Artifact","","Water Tank"];
+let list = ["Destroy"," ","Factory","Farm","Warehouse","Windmill","Townhall","Mine","Fishery","Park","Wood Cutter","Sword Artifact","","Water Tank","Market"];
 const selectedbuid = document.getElementById('selectedbuild');
 const sidebarButtons = document.querySelectorAll('.sidebar-button');
 sidebarButtons.forEach(button => {
@@ -202,7 +210,8 @@ canvas.addEventListener('click', (event) => {
     '9': BuildPark,
     '10': BuildWDC,
     '11': BSword,
-    '13': Btank
+    '13': Btank,
+    '14': BMarket
   };
 
   const col = Math.floor(x / tileWidth);
@@ -226,8 +235,8 @@ let msgs = ['Requires road nearby or farm and place on grass',
             'Can only destroy roads',
             'OR Not enough Coins ']  
 
-//0grass 1house 2road 3fram 4warehouse 5factory 6townhall 7windmill 8mine 9fishery 10park 11WDC 12Sword 13tank
-const Bcost = [ 1, 2, 0, 1, 5, 2, 10, 25, 50, 75 ,100, 150, 200, 5]
+//0grass 1house 2road 3fram 4warehouse 5factory 6townhall 7windmill 8mine 9fishery 10park 11WDC 12Sword 13tank 14Market
+const Bcost = [ 1, 2, 0, 1, 5, 2, 10, 25, 50, 75 ,100, 150, 200, 5, 20]
 //All Functions for building
 
 
@@ -380,29 +389,21 @@ function Btank(row,col){
     h+=2;
     cityData[row][col]=13;
     console.log(cityData);
-    const radius = 2; 
-    // Loop through the tiles in the radius
-    for (let r = row - radius; r <= row + radius; r++) {
-      for (let c = col - radius; c <= col + radius; c++) {
-        // Check if the tile is within bounds
-        if (r >= 0 && r < numRows && c >= 0 && c < numCols) {
-          // Manipulate based on the building type
-          console.log(r+" "+c);
-          if (cityData[r][c] === -1 || cityData[row][col]===12.0){
-            console.log("here");
-            No_of[0]++;
-          } else if (cityData[r][c] === 3) {
-            No_of[2]++;
-            console.log("here2")
-          }
-        }
-      }
-    }
     CoinsCurrency-=Bcost[13];
-    NoOfPeopleHTML.innerHTML = No_of[0];
-  }else{alerts.innerText="Place on grass or Not Enough Coins ( Place water tank after buildings to get benefit on farms and houses )";}
+    No_of[0]+=1;
+  }else{alerts.innerText="Not enough coins, build on grass";}
 }
-
+function BMarket(row,col){
+  if(ISconnected(row,col) && ISconnected(row,col+1) && Bcost[14]<CoinsCurrency){
+    cityData[row][col]=14.0;
+    cityData[row][col+1]=14.1;
+    CoinsCurrency-=Bcost[14];
+    h+=4;
+  }
+  else{
+    alerts.innerText = msgs[1]+ " " + msgs[5];
+  }
+}
 
 //Connected to Road Grass and 8,1 tile
 function ISconnected(row,col){
@@ -411,13 +412,13 @@ function ISconnected(row,col){
       && isConnectedToInitialRoad(row, col)){
         return true;
       }
-      else{
-        return false;
-      }
+  else{
+    return false;
+  }
 }
 
 
-let yrmnth = [1200, 0]
+
 
 function yearupdate(){
   //Each 10 seconds past are 6 mnth 
@@ -496,10 +497,8 @@ buttons.forEach(button => {
   button.addEventListener('click', () => {
     // Get the re-index from the button's attribute
     const reIndex = parseInt(button.getAttribute('re-index'));
-    
     // Get the cost from the itemCosts array
     const cost = itemsCosts[reIndex];
-
     // Check if the item is already unlocked
     if (unlck[reIndex] === false) {
       // Check if the player has enough coins
@@ -537,7 +536,12 @@ function CalPRO(){
   let mp = [3, 2, 6]; //throttle producion
   //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
   //let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  
+  if(h>0){
+    hi.innerText=Math.floor((h/No_of[0]*3)*100) + "%";
+  }
+  if(h<0){
+    hi.innerText=Math.floor((h/No_of[0]*3)*100) + "%";
+  }
   if(stuse<Op[1])
   {  
   if(eff>0 && No_of[2]>0){Op[0]+=Math.min(6,No_of[2]);if((No_of[2]-6)>0){Op[0]+=Math.floor(No_of[2]*(1/40));}}         //Raw material produced here 
@@ -588,7 +592,6 @@ function CalPRO(){
   else{
     alerts.innerText="Not enough storage"
   }
-
   for(var i=0;i<Op2.length;i++){
   stuse+=Op2[i];
   }
@@ -647,6 +650,12 @@ function UpdateTotal(){
   }
   else if(unlck[12]){
     tsell+=Math.floor((tsell*15)/100);
+  }
+  if((h/No_of[0]*3)>=1.5){
+    tsell+=Math.floor((1.5)*tsell);
+  }
+  if((h/No_of[0])<0){
+    tsell-=Math.floor((0.20)*tsell)
   }
   tsellbtn.innerText=tsell;
 }
