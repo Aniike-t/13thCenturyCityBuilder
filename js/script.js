@@ -27,7 +27,7 @@ let Op = [0,0]
 
 //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
 let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];       //Output of secondary buildings
-let CoinsCurrency = 10;                           //Starting currency
+let CoinsCurrency = 10000;                           //Starting currency
 const yr = document.getElementById('yr');
 const mnth = document.getElementById('mnth');
 
@@ -484,13 +484,9 @@ function isConnectedToInitialRoad(row, col) {
   return false; // The road is not connected to (8, 1)
 }
 
-
 // Get all the buttons with the "scrbtn" class
 const buttons = document.querySelectorAll('.scrbtn');
 //assigned all are locked
-
-
-
 
 // Add a click event listener to each button
 buttons.forEach(button => {
@@ -524,6 +520,7 @@ buttons.forEach(button => {
 // No_of = [ 0, 0, 0, 0, 0, 0, 0, 0]  
 // NoOfHouses0 NoOfFactory1 NoOfFarmlands2 NoOfWindmill3 NoOfMines4 Wares5 Fishery6 WDC7
 function CalPRO(){
+  stuse=0;
   let eff = 0;
   try{
     eff = Math.floor((No_of[0])/(No_of[1]+No_of[2]+No_of[3]+No_of[4]+No_of[5]+No_of[6]+No_of[7]))
@@ -536,6 +533,12 @@ function CalPRO(){
   let mp = [3, 2, 6]; //throttle producion
   //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
   //let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  
+  for(var i=0;i<Op2.length;i++){
+    stuse+=Op2[i];      //check all the items
+    }
+    stuse+=Op[0];       //Add raw materials to total
+
   if(h>0){
     hi.innerText=Math.floor((h/No_of[0]*3)*100) + "%";
   }
@@ -544,58 +547,54 @@ function CalPRO(){
   }
   if(stuse<Op[1])
   {  
-  if(eff>0 && No_of[2]>0){Op[0]+=Math.min(6,No_of[2]);if((No_of[2]-6)>0){Op[0]+=Math.floor(No_of[2]*(1/40));}}         //Raw material produced here 
-  
-  if(eff>0 && (unlck[6] || unlck[7] || unlck[8])){
-    const effc = Math.min(eff,2)
-    if(unlck[6]){Op2[6]+=No_of[4]*effc;}   //No_of[4]*2 / 2
-    if(unlck[7]){Op2[7]+=No_of[4]*effc}
-    if(unlck[8]){Op2[8]+=(No_of[4]/2)*effc}
-  }    // For Coal and Iron half each and one gunpowder
-  
-  if(eff>0 && unlck[5] && No_of[7]>0){
-    const effc = Math.min(eff,2)
-    Op2[5]+=(No_of[7]*effc);   //Make Artifacts
-  }  
+      if(eff>0 && No_of[2]>0){Op[0]=Op[0]+Math.min(6,No_of[2]);if((No_of[2]-6)>0){Op[0]=Op[0]+Math.floor(No_of[2]*(1/40));}}         //Raw material produced here 
+      
+      if(eff>0 && (unlck[6] || unlck[7] || unlck[8])){
+        const effc = Math.min(eff,2)
+        if(unlck[6]){Op2[6]+=No_of[4]*effc;}   //No_of[4]*2 / 2
+        if(unlck[7]){Op2[7]+=No_of[4]*effc}
+        if(unlck[8]){Op2[8]+=(No_of[4]/2)*effc}
+      }    // For Coal and Iron half each and one gunpowder
+      
+      if(eff>0 && unlck[5] && No_of[7]>0){
+        const effc = Math.min(eff,2)
+        Op2[5]+=(No_of[7]*effc);   //Make Artifacts
+      }  
 
-  if( unlck[1] && eff>0 && Op[0]>0){
-    if(Op[0]>No_of[3]){
-      Op[0]=Op[0]-Math.min(mp[2],No_of[3]);
-      Op2[1]=Op2[1]+Math.min(mp[2],No_of[3]);
-    }
-    else{
-      Op[0]=0;Op2[1]=Op2[1]+No_of[3];
-    }                                             //Take one rawmaterial and turn it into flour
-  } 
-  if( unlck[0] && eff>0 && Op[0]>0){
-    if(Op[0]>No_of[1]){
-      Op[0]=Op[0]-Math.min(mp[2],No_of[1]);
-      Op2[0]=Op2[0]+Math.min(mp[2],No_of[1]);}
-    else{
-      Op[0]=0;Op2[0]=Op2[0]+No_of[1];
-    }                                              //Take one rawmaterial and turn it into sugar
-  }
-  if( unlck[3] && eff>1 && Op[0]>0){
-    if(Op[0]>No_of[1]){Op[0]=Op[0]-Math.min(mp[2],No_of[1]);Op2[3]=Op2[3]+Math.min(mp[2],No_of[1]);}
-    else{Op[0]=0;Op2[3]=Op2[3]+No_of[1];}     //Turn 1 rawmaterial into paper 
-  }
-  if( unlck[9] && eff>1 && Op2[7]>0 && Op2[8]>0){
-    if(Op2[7]>No_of[1] && Op2[8]>No_of[1]){Op2[7]=Op2[7]-Math.min(mp[0],No_of[1]);Op2[8]=Op2[8]-Math.min(mp[0],No_of[1]);Op2[9]=Op2[9]+Math.min(mp[0],No_of[1]);}
-    else{alerts.innerText="Not enough manpower and production of iron and gunpowder"}     //Turn 1 iron and gunpowder into cannon 
-  }
-  if( unlck[10] && eff>1 && Op2[7]>0 && Op2[8]>0){
-    if(Op2[7]>No_of[1] && Op2[8]>No_of[1]){Op2[7]=Op2[7]-Math.min(mp[1],No_of[1]);Op2[8]=Op2[8]-Math.min(mp[1],No_of[1]);Op2[10]=Op2[10]+Math.min(mp[1],No_of[1]);}
-    else{alerts.innerText="Not enough manpower and production of iron and gunpowder"}     //Turn 1 iron and gunpowder into cannon 
-  }
-  if (No_of[6]>0 && eff>0 && unlck[4])Op2[4]+=Math.min(8,No_of[6]);
+      if( unlck[1] && eff>0 && Op[0]>1){
+        if(Op[0]>No_of[3]){
+          Op[0]=Op[0]-Math.min(mp[2],No_of[3]);
+          Op2[1]=Op2[1]+Math.min(mp[2],No_of[3]);
+        }
+        else{
+          Op[0]=0;Op2[1]=Op2[1]+No_of[3];
+        }                                             //Take one rawmaterial and turn it into flour
+      } 
+      if( unlck[0] && eff>0 && Op[0]>1){
+        if(Op[0]>No_of[1]){
+          Op[0]=Op[0]-Math.min(mp[2],No_of[1]);
+          Op2[0]=Op2[0]+Math.min(mp[2],No_of[1]);}
+        else{
+          Op[0]=0;Op2[0]=Op2[0]+No_of[1];
+        }                                              //Take one rawmaterial and turn it into sugar
+      }
+      if( unlck[3] && eff>1 && Op[0]>1){
+        if(Op[0]>No_of[1]){Op[0]=Op[0]-Math.min(mp[2],No_of[1]);Op2[3]=Op2[3]+Math.min(mp[2],No_of[1]);}
+        else{Op[0]=0;Op2[3]=Op2[3]+No_of[1];}     //Turn 1 rawmaterial into paper 
+      }
+      if( unlck[9] && eff>1 && Op2[7]>0 && Op2[8]>0){
+        if(Op2[7]>No_of[1] && Op2[8]>No_of[1]){Op2[7]=Op2[7]-Math.min(mp[0],No_of[1]);Op2[8]=Op2[8]-Math.min(mp[0],No_of[1]);Op2[9]=Op2[9]+Math.min(mp[0],No_of[1]);}
+        else{alerts.innerText="Not enough manpower and production of iron and gunpowder"}     //Turn 1 iron and gunpowder into cannon 
+      }
+      if( unlck[10] && eff>1 && Op2[7]>0 && Op2[8]>0){
+        if(Op2[7]>No_of[1] && Op2[8]>No_of[1]){Op2[7]=Op2[7]-Math.min(mp[1],No_of[1]);Op2[8]=Op2[8]-Math.min(mp[1],No_of[1]);Op2[10]=Op2[10]+Math.min(mp[1],No_of[1]);}
+        else{alerts.innerText="Not enough manpower and production of iron and gunpowder"}     //Turn 1 iron and gunpowder into cannon 
+      }
+      if (No_of[6]>0 && eff>0 && unlck[4])Op2[4]+=Math.min(8,No_of[6]);
   }
   else{
     alerts.innerText="Not enough storage"
   }
-  for(var i=0;i<Op2.length;i++){
-  stuse+=Op2[i];
-  }
-  stuse+=Op[0];
   SmmryUD();
 }
 
@@ -644,7 +643,7 @@ function UpdateTotal(){
   for(var i=0;i<prices.length;i++){
     tsell+=(Op2[i]*prices[i]);
   }
-  tsell+=Op[0];
+  tsell+=Op[0];//Update for raw materials selling
   if(unlck[11]){
     tsell+=Math.floor((tsell*10)/100);
   }
