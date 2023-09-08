@@ -33,7 +33,7 @@ let Op = [0,0]
 
 //Sugar0 Flour1 Clothing2 Paper3 Ink4 WoodenArtifacts5 Coal6 Iron7 Gun-Powder8 Cannon9 Gun10 
 let Op2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];       //Output of secondary buildings
-let CoinsCurrency = 10;                            //Starting currency
+let CoinsCurrency = 99999;                            //Starting currency
 const yr = document.getElementById('yr');
 const mnth = document.getElementById('mnth');
 
@@ -283,22 +283,22 @@ function BuildHouse(row,col){
   }
 }
 function BuildFactory(row,col){
-  h-=2
   if(ISconnected(row,col)&& CoinsCurrency>=Bcost[5]){
     cityData[row][col] = 2;
     CoinsCurrency-=Bcost[5];
     No_of[1]++;
+    h-=2;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
   }
 }
 function BuildRoad(row,col){
-  if(cityData[row][col] ===-2 || cityData[row][col]===1){
-    alerts.innerText = msgs[2]+ " " + msgs[5];
+  if(Math.floor(cityData[row][col])===0){
+    cityData[row][col] = -2;
   }
   else{
-    cityData[row][col] = -2;
+    alerts.innerText = msgs[2]+ " " + msgs[5];
   } 
 }
 function BuildWindmill(row,col){
@@ -314,12 +314,12 @@ function BuildWindmill(row,col){
   }
 }
 function BSword(row,col){
-  h+=10
   if((ISconnected(row,col) || ISconnected(row-1,col) ) && CoinsCurrency>=Bcost[12]
       && Math.floor(cityData[row-1][col])===0 && Math.floor(cityData[row][col])===0){
     cityData[row-1][col] = 11.1;
     cityData[row][col] = 11.0;
     CoinsCurrency-=Bcost[12];
+    h+=10
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -327,11 +327,11 @@ function BSword(row,col){
 }
 let ISTownhall = false; //To maintain one townhall only
 function BuildTownHall(row,col){
-  h+=3
   if(ISconnected(row,col) && ISTownhall === false && CoinsCurrency>=Bcost[6]){
     ISTownhall = true;
     CoinsCurrency-=Bcost[6];
     cityData[row][col] = 6;
+    h+=3;
   }
   else{
     alerts.innerText = msgs[3]+ " " + msgs[5];
@@ -369,23 +369,21 @@ function BuildFishery(row,col){
   }
 }
 function BuildPark(row,col){
-  h+=4
   if(Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[10]){
     cityData[row][col] = 9;
     CoinsCurrency-=Bcost[10];
-    No_of[8]++;
+    No_of[8]++;h+=4;
   }else{
     alerts.innerText = "Only can be placed over grass"+ " " + msgs[5];
   }
 }
 function BuildWDC(row,col){
-  h-=2;
   if((ISconnected(row,col) || ISconnected(row-1,col)) 
       && Math.floor(cityData[row-1][col])===0 && Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[11]){
     cityData[row-1][col] = 10.1;
     cityData[row][col] = 10.0;
     CoinsCurrency-=Bcost[11];
-    No_of[7]++;
+    No_of[7]++;h-=2;
   }
   else{
     alerts.innerText = msgs[1]+ " " + msgs[5];
@@ -437,6 +435,7 @@ function yearupdate(){
   }
   yr.innerText = yrmnth[0];
   mnth.innerText = yrmnth[1];
+  alerts.innerText = "";
 }
 
 //-------------Production algos ----------------
@@ -625,9 +624,14 @@ function SmmryUD(){
    summaryElement.appendChild(storageParagraph);
     // Loop through the Op2 array and add each value one below the other
   for (var i = 0; i < Op2.length; i++) {
-    var paragraphElement = document.createElement('p');
-    paragraphElement.innerHTML = textToAdd[i] + " = " + Op2[i];
-    summaryElement.appendChild(paragraphElement);
+    if(i===2){
+      //Empty because not made building for clothing mill
+    }
+    else{
+      var paragraphElement = document.createElement('p');
+      paragraphElement.innerHTML = textToAdd[i] + " = " + Op2[i];
+      summaryElement.appendChild(paragraphElement);
+    }
   }
 }
 

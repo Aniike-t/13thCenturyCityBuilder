@@ -11,7 +11,7 @@ I had stayed true to the 13th-century theme in the game by including research el
 
 ### Screenshot
 
-![alt text](https://github.com/Aniike-t/13thCenturyCityBuilder/blob/master/Screenshot/ss1.png)
+![alt text](https://github.com/Aniike-t/13thCenturyCityBuilder/blob/master/Screenshot/ss2.png)
 
 ### Overview
 - The game is played on a 2D grid where you can click to place objects and construct your city.
