@@ -1,3 +1,9 @@
+window.addEventListener("beforeunload", function (e) {
+  var confirmationMessage = "Game will be reset after leaving/reloading it";
+  e.returnValue = confirmationMessage;
+  return confirmationMessage;
+});
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -363,7 +369,7 @@ function BuildFishery(row,col){
   }
 }
 function BuildPark(row,col){
-  h+=5
+  h+=4
   if(Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[10]){
     cityData[row][col] = 9;
     CoinsCurrency-=Bcost[10];
@@ -373,6 +379,7 @@ function BuildPark(row,col){
   }
 }
 function BuildWDC(row,col){
+  h-=2;
   if((ISconnected(row,col) || ISconnected(row-1,col)) 
       && Math.floor(cityData[row-1][col])===0 && Math.floor(cityData[row][col])===0 && CoinsCurrency>=Bcost[11]){
     cityData[row-1][col] = 10.1;
@@ -651,7 +658,7 @@ function UpdateTotal(){
     tsell+=Math.floor((tsell*15)/100);
   }
   if((h/No_of[0]*3)>=1.5){
-    tsell+=Math.floor((1.5)*tsell);
+    tsell+=Math.floor((0.5)*tsell);
   }
   if((h/No_of[0])<0){
     tsell-=Math.floor((0.20)*tsell)
