@@ -4,6 +4,9 @@ Welcome to the 13th Century City Builder Game, a 2D medieval city-building game 
 - This game is made for game jam hosted on : https://js13kgames.com
 - Game is made under 13Kilobytes ( 13,312bytes ) as per the rules.
 - Based on the theme : 13th Century.
+- Play the game on : https://js13kgames.com/games/13th-century-city-builder/index.html
+
+
 <br><br>
 I had stayed true to the 13th-century theme in the game by including research elements that were actually invented during that time.
 
@@ -47,6 +50,14 @@ You can sell surplus materials by clicking the "Sell-All" button. This will conv
 
 ## Enjoy the Game!
 Build your medieval city, manage your resources wisely, and lead your civilization to prosperity in this challenging 13th-century city builder game. Have fun!
+
+## Future Updates may include ( Not under 13kb ) :
+- Add more building types with different stats.
+- Seasonal changes in farmlands and other possible buildings.
+- Improve Research tree.
+- Better indication of produced materials.
+- Better 2d assets and more
+
 
 ### Credits
 - All assets are self-made.
